@@ -1,18 +1,793 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="A premium digital agency delivering IT support, workflow automation, and intelligent data agent solutions."
-    />
-    <link rel="icon" type="image/svg+xml" href="./logo-mark.svg" />
-    <title>Apex Ops | IT Support, Automation & Data Agents</title>
-    <script type="module" crossorigin src="./assets/index-8wRAjiFC.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Dt96Jy5T.css">
-  </head>
-  <body class="bg-slate-950">
-    <div id="root"></div>
-  </body>
-  </html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindLens — Live Meeting Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090b;
+  --surface: #0f1013;
+  --surface2: #16181d;
+  --border: #1c1f26;
+  --border2: #252931;
+  --text: #e2e4ec;
+  --text2: #7b8499;
+  --text3: #3d4455;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59,130,246,0.15);
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --red-glow: rgba(239,68,68,0.1);
+  --purple: #a78bfa;
+  --pink: #f472b6;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --r: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+.topbar{height:46px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;flex-shrink:0}
+.logo{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;display:flex;align-items:center;gap:9px}
+.logo-pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);transition:background .3s,box-shadow .3s;flex-shrink:0}
+.logo-pulse.rec{background:var(--red);box-shadow:0 0 10px var(--red);animation:blink 1.1s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.topbar-right{display:flex;align-items:center;gap:8px}
+
+.btn{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{color:var(--text);border-color:var(--text3)}
+.btn.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.accent:hover{background:#2563eb;border-color:#2563eb}
+.btn.sm{padding:4px 8px;font-size:9px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+
+.main{display:grid;grid-template-columns:270px 1fr 330px;flex:1;overflow:hidden;gap:1px;background:var(--border)}
+
+.col{background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+.col-head{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-height:40px}
+.col-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);font-weight:500}
+.col-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.col-body::-webkit-scrollbar{width:3px}
+.col-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+.mic-btn{width:100%;padding:11px;border:1px solid var(--border2);border-radius:var(--r);background:var(--surface);color:var(--text2);font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}
+.mic-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mic-btn.active{background:var(--red-glow);border-color:var(--red);color:var(--red)}
+.t-block{margin-bottom:10px}
+.t-ts{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.07em;margin-bottom:3px}
+.t-text{font-size:12.5px;line-height:1.7;color:var(--text2);font-weight:300}
+.empty-msg{font-family:var(--mono);font-size:10.5px;color:var(--text3);text-align:center;padding:40px 0;line-height:2;letter-spacing:.04em}
+
+.sugg-batch{margin-bottom:18px}
+.sugg-batch-ts{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.07em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sugg-batch-ts::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.sugg-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px 34px 11px 13px;margin-bottom:7px;cursor:pointer;transition:all .15s;position:relative;animation:card-in .25s ease-out both}
+@keyframes card-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.sugg-card:hover{background:var(--surface2);border-color:var(--border2);transform:translateX(3px)}
+.sugg-arrow{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:13px;transition:all .15s}
+.sugg-card:hover .sugg-arrow{color:var(--text2);right:9px}
+.sugg-type{font-family:var(--mono);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:4px}
+.type-question{color:var(--accent)}
+.type-fact-check{color:var(--amber)}
+.type-insight{color:var(--green)}
+.type-talking-point{color:var(--purple)}
+.type-answer{color:var(--pink)}
+.type-clarification{color:#38bdf8}
+.sugg-preview{font-size:12px;line-height:1.55;color:var(--text);font-weight:400}
+.sugg-hint{font-size:10.5px;color:var(--text2);margin-top:4px;line-height:1.5}
+.loading-block{display:flex;align-items:center;gap:8px;padding:8px 0;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:10px}
+.dots{display:inline-flex;gap:3px}
+.dots span{width:4px;height:4px;border-radius:50%;background:var(--text3);animation:dot 1.2s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-5px);opacity:1}}
+
+.chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border2)}
+.cmsg-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.cmsg-label.user-lbl{text-align:right}
+.bubble{padding:10px 13px;font-size:12.5px;line-height:1.65;border-radius:var(--r);white-space:pre-wrap;word-wrap:break-word}
+.cmsg.user .bubble{background:var(--accent-glow);border:1px solid rgba(59,130,246,.2);color:var(--text);border-radius:var(--r) var(--r) 2px var(--r)}
+.cmsg.ai .bubble{background:var(--surface);border:1px solid var(--border);color:var(--text2);border-radius:2px var(--r) var(--r) var(--r)}
+.chat-foot{padding:10px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;gap:7px}
+.chat-input{flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:8px 11px;color:var(--text);font-family:var(--sans);font-size:12.5px;outline:none;resize:none;min-height:36px;max-height:100px;transition:border-color .15s;line-height:1.5}
+.chat-input:focus{border-color:var(--accent)}
+.chat-input::placeholder{color:var(--text3);font-size:12px}
+.send-btn{align-self:flex-end;background:var(--accent);color:#fff;border:none;border-radius:var(--r);width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .15s;flex-shrink:0}
+.send-btn:hover{background:#2563eb}
+.send-btn:disabled{background:var(--surface2);cursor:not-allowed}
+
+.statusbar{height:22px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:18px;flex-shrink:0}
+.sitem{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.06em;display:flex;align-items:center;gap:5px}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.sdot.ok{background:var(--green);box-shadow:0 0 5px var(--green)}
+.sdot.rec{background:var(--red);box-shadow:0 0 5px var(--red);animation:blink 1.1s ease-in-out infinite}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:10px;width:580px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text)}
+.modal-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:16px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.field input,.field textarea{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r);padding:8px 11px;color:var(--text);font-family:var(--sans);font-size:12.5px;outline:none;transition:border-color .15s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{resize:vertical;min-height:90px;line-height:1.6;font-size:12px;font-family:var(--mono)}
+.field .hint{font-size:10.5px;color:var(--text3)}
+.field input[type=password]{letter-spacing:.12em;font-size:13px;font-family:var(--mono)}
+.sec-div{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);padding-bottom:6px;border-bottom:1px solid var(--border);margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-pulse" id="logoPulse"></div>
+    MINDLENS
+  </div>
+  <div class="topbar-right">
+    <span id="timerDisplay" style="font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.08em;min-width:45px;text-align:right"></span>
+    <button class="btn" onclick="exportSession()">⬇ Export</button>
+    <button class="btn" onclick="openSettings()">⚙ Settings</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- LEFT: TRANSCRIPT -->
+  <div class="col">
+    <div class="col-head">
+      <span class="col-label">Transcript</span>
+      <span id="wordCount" style="font-family:var(--mono);font-size:9px;color:var(--text3)">0 words</span>
+    </div>
+    <div class="col-body" id="transcriptBody">
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+        <span>🎙</span>
+        <span id="micBtnLabel">Start Recording</span>
+      </button>
+      <div id="transcriptLines">
+        <div class="empty-msg">Tap start to record.<br>Transcript appears here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MIDDLE: SUGGESTIONS -->
+  <div class="col">
+    <div class="col-head">
+      <span class="col-label">Live Suggestions</span>
+      <div style="display:flex;gap:6px;align-items:center">
+        <span id="nextRefreshLabel" style="font-family:var(--mono);font-size:9px;color:var(--text3)"></span>
+        <button class="btn sm" id="refreshBtn" onclick="manualRefresh()" disabled>↻ Refresh</button>
+      </div>
+    </div>
+    <div class="col-body" id="suggestionsBody">
+      <div class="empty-msg">Suggestions appear here<br>once recording starts.</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: CHAT -->
+  <div class="col">
+    <div class="col-head">
+      <span class="col-label">Chat</span>
+      <button class="btn sm" onclick="clearChat()">Clear</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="empty-msg" style="padding:30px 0">Click a suggestion<br>or type a question below.</div>
+    </div>
+    <div class="chat-foot">
+      <textarea class="chat-input" id="chatInput" placeholder="Ask anything about the conversation…" rows="1" onkeydown="chatKeydown(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendChat()" disabled title="Send (Enter)">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="statusbar">
+  <div class="sitem"><div class="sdot" id="apiDot"></div><span id="apiStatus">No API key — open Settings</span></div>
+  <div class="sitem"><div class="sdot" id="micDot"></div><span id="micStatus">Mic off</span></div>
+  <div class="sitem" id="chunkStat" style="display:none"><span id="chunkLabel"></span></div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="overlay" id="settingsOverlay" onclick="if(event.target===this)closeSettings()">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">Settings</span>
+      <button class="btn sm" onclick="closeSettings()">✕ Close</button>
+    </div>
+    <div class="modal-body">
+      <div class="sec-div">API Configuration</div>
+      <div class="field">
+        <label>Groq API Key</label>
+        <input type="password" id="s_apiKey" placeholder="gsk_…" autocomplete="off">
+        <span class="hint">Stored in memory only — never persisted or sent anywhere except Groq.</span>
+      </div>
+
+      <div class="sec-div">Timing</div>
+      <div class="field">
+        <label>Suggestion Refresh Interval (seconds)</label>
+        <input type="number" id="s_refreshInterval" min="15" max="120" step="5">
+      </div>
+      <div class="field">
+        <label>Transcript Chunk Size (seconds)</label>
+        <input type="number" id="s_chunkSize" min="10" max="60" step="5">
+      </div>
+
+      <div class="sec-div">Context Windows</div>
+      <div class="field">
+        <label>Suggestion Context (last N words of transcript)</label>
+        <input type="number" id="s_suggContext" min="100" max="2000" step="50">
+        <span class="hint">How much recent transcript is used to generate suggestions.</span>
+      </div>
+      <div class="field">
+        <label>Chat Context (last N words of transcript)</label>
+        <input type="number" id="s_chatContext" min="200" max="4000" step="100">
+        <span class="hint">Transcript context passed when answering chat/clicked questions.</span>
+      </div>
+
+      <div class="sec-div">Prompts</div>
+      <div class="field">
+        <label>Live Suggestion Prompt</label>
+        <textarea id="s_suggPrompt" rows="10"></textarea>
+        <span class="hint">Use {transcript}. Must return a valid JSON array of 3 suggestions.</span>
+      </div>
+      <div class="field">
+        <label>Detailed Answer Prompt (card click)</label>
+        <textarea id="s_detailPrompt" rows="6"></textarea>
+        <span class="hint">Use {transcript} and {suggestion}.</span>
+      </div>
+      <div class="field">
+        <label>Chat System Prompt</label>
+        <textarea id="s_chatPrompt" rows="6"></textarea>
+        <span class="hint">Use {transcript} for full transcript context.</span>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="resetDefaults()">Reset Defaults</button>
+      <button class="btn accent" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DEFAULTS ─────────────────────────────────────────────────────────────────
+const DEFAULTS = {
+  apiKey: '',
+  refreshInterval: 30,
+  chunkSize: 30,
+  suggContext: 600,
+  chatContext: 2000,
+
+  suggPrompt: `You are an expert real-time meeting intelligence assistant. Analyze the transcript and generate exactly 3 high-value suggestions.
+
+RECENT TRANSCRIPT:
+{transcript}
+
+Choose suggestion types that BEST FIT the current moment. Types available:
+- "question" — A smart follow-up question the participant should ask RIGHT NOW
+- "talking-point" — A strong argument, angle, or fact to raise that adds value
+- "answer" — A direct, factual answer to a question that was just asked in the transcript
+- "fact-check" — A correction or verification of a specific claim that was made
+- "clarification" — Something ambiguous that needs to be defined or clarified
+- "insight" — A strategic implication or pattern the speaker may have missed
+
+Selection logic:
+- If someone just asked a question → include an "answer"
+- If a claim seems questionable → include a "fact-check"
+- If the conversation is drifting → include a "talking-point" to re-focus
+- If a term is being used loosely → include a "clarification"
+- Mix types to cover different needs; don't repeat the same type unless essential
+- Be SPECIFIC to what was actually said — no generic advice
+
+Rules for content:
+- "preview" must stand alone as useful — a complete sentence with real content, not a teaser
+- "hint" is one sentence of additional context or why this matters
+- Reference specific names, numbers, or concepts from the transcript
+
+Return ONLY a valid JSON array, no other text:
+[
+  {
+    "type": "question",
+    "preview": "Ask what success metrics they're using for Q3 — if it's pure revenue, their current approach won't show results until Q4.",
+    "hint": "They mentioned a 'good quarter' but haven't defined what good means for this team."
+  },
+  ...
+]`,
+
+  detailPrompt: `You are MindLens, an expert meeting assistant. The user clicked on a suggestion during a live conversation and wants a deeper, more detailed response to help them act on it immediately.
+
+RECENT TRANSCRIPT (for context):
+{transcript}
+
+SUGGESTION SELECTED:
+{suggestion}
+
+Write a detailed, actionable response (3–5 paragraphs). Be specific — cite what was actually said, provide concrete talking points, relevant facts, or step-by-step guidance. Write in flowing prose, no headers. Prioritize what the person can use RIGHT NOW in the conversation.`,
+
+  chatPrompt: `You are MindLens, a real-time meeting assistant. Help the user navigate, understand, and respond effectively in their ongoing conversation.
+
+TRANSCRIPT SO FAR:
+{transcript}
+
+Be direct and specific. When relevant, reference actual content from the transcript. If the transcript is empty, help with general meeting strategy.`
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let cfg = { ...DEFAULTS };
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let transcriptBlocks = [];   // {ts, text}[]
+let suggestionBatches = [];  // {ts, cards}[]
+let chatHistory = [];        // {role, content, ts}[]
+let sessionStartTs = null;
+let recordingTimer = null;
+let refreshTimer = null;
+let chunkTimer = null;
+let nextRefreshIn = 0;
+let wordCount = 0;
+let isSuggesting = false;
+let isChatting = false;
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+window.onload = () => {
+  const saved = sessionStorage.getItem('ml_cfg');
+  if (saved) { try { cfg = { ...DEFAULTS, ...JSON.parse(saved) }; } catch(e) {} }
+  updateApiStatus();
+};
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+function openSettings() {
+  const keys = ['apiKey','refreshInterval','chunkSize','suggContext','chatContext','suggPrompt','detailPrompt','chatPrompt'];
+  keys.forEach(k => { const el = document.getElementById('s_'+k); if(el) el.value = cfg[k]; });
+  document.getElementById('settingsOverlay').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('open');
+}
+
+function saveSettings() {
+  const numKeys = new Set(['refreshInterval','chunkSize','suggContext','chatContext']);
+  ['apiKey','refreshInterval','chunkSize','suggContext','chatContext','suggPrompt','detailPrompt','chatPrompt'].forEach(k => {
+    const el = document.getElementById('s_'+k);
+    if (!el) return;
+    cfg[k] = numKeys.has(k) ? parseInt(el.value) || DEFAULTS[k] : el.value;
+  });
+  sessionStorage.setItem('ml_cfg', JSON.stringify(cfg));
+  updateApiStatus();
+  closeSettings();
+}
+
+function resetDefaults() {
+  cfg = { ...DEFAULTS };
+  openSettings();
+}
+
+function updateApiStatus() {
+  const hasKey = cfg.apiKey && cfg.apiKey.startsWith('gsk_');
+  document.getElementById('apiDot').className = 'sdot' + (hasKey ? ' ok' : '');
+  document.getElementById('apiStatus').textContent = hasKey ? 'API connected' : 'No API key — open Settings';
+  document.getElementById('sendBtn').disabled = !hasKey;
+}
+
+// ── RECORDING ─────────────────────────────────────────────────────────────────
+async function toggleMic() {
+  if (isRecording) { stopRecording(); return; }
+  if (!cfg.apiKey) { openSettings(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { sampleRate: 16000, channelCount: 1 } });
+    startRecording(stream);
+  } catch(e) {
+    alert('Microphone access denied. Please allow mic access and try again.');
+  }
+}
+
+function startRecording(stream) {
+  isRecording = true;
+  sessionStartTs = sessionStartTs || Date.now();
+  audioChunks = [];
+
+  const mimeType = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4']
+    .find(m => MediaRecorder.isTypeSupported(m)) || '';
+  mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
+  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+  mediaRecorder.start(500);
+
+  // UI
+  document.getElementById('micBtn').className = 'mic-btn active';
+  document.getElementById('micBtnLabel').textContent = 'Stop Recording';
+  document.getElementById('logoPulse').className = 'logo-pulse rec';
+  document.getElementById('micDot').className = 'sdot rec';
+  document.getElementById('micStatus').textContent = 'Recording…';
+  document.getElementById('refreshBtn').disabled = false;
+  document.getElementById('sendBtn').disabled = false;
+  const lines = document.getElementById('transcriptLines');
+  if (lines.querySelector('.empty-msg')) lines.innerHTML = '';
+
+  // Chunk timer
+  chunkTimer = setInterval(flushChunk, cfg.chunkSize * 1000);
+
+  // Refresh countdown
+  nextRefreshIn = cfg.refreshInterval;
+  updateRefreshLabel();
+  refreshTimer = setInterval(() => {
+    nextRefreshIn--;
+    updateRefreshLabel();
+    if (nextRefreshIn <= 0) {
+      nextRefreshIn = cfg.refreshInterval;
+      flushChunkAndSuggest();
+    }
+  }, 1000);
+
+  // Elapsed timer
+  let elapsed = 0;
+  recordingTimer = setInterval(() => {
+    elapsed++;
+    const m = String(Math.floor(elapsed/60)).padStart(2,'0');
+    const s = String(elapsed%60).padStart(2,'0');
+    document.getElementById('timerDisplay').textContent = m+':'+s;
+  }, 1000);
+}
+
+function stopRecording() {
+  isRecording = false;
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+  }
+  clearInterval(chunkTimer);
+  clearInterval(refreshTimer);
+  clearInterval(recordingTimer);
+  if (audioChunks.length > 0) flushChunk();
+
+  document.getElementById('micBtn').className = 'mic-btn';
+  document.getElementById('micBtnLabel').textContent = 'Start Recording';
+  document.getElementById('logoPulse').className = 'logo-pulse';
+  document.getElementById('micDot').className = 'sdot';
+  document.getElementById('micStatus').textContent = 'Mic off';
+  document.getElementById('nextRefreshLabel').textContent = '';
+  document.getElementById('refreshBtn').disabled = true;
+  document.getElementById('timerDisplay').textContent = '';
+}
+
+function updateRefreshLabel() {
+  document.getElementById('nextRefreshLabel').textContent = 'refresh in ' + nextRefreshIn + 's';
+}
+
+// ── TRANSCRIPTION ─────────────────────────────────────────────────────────────
+async function flushChunk() {
+  if (!audioChunks.length) return;
+  const chunks = [...audioChunks];
+  audioChunks = [];
+  const mimeType = mediaRecorder?.mimeType || 'audio/webm';
+  const ext = mimeType.includes('ogg') ? 'ogg' : mimeType.includes('mp4') ? 'm4a' : 'webm';
+  const blob = new Blob(chunks, { type: mimeType });
+  if (blob.size < 800) return;
+
+  setChunkStat('Transcribing audio…');
+  try {
+    const text = await transcribeAudio(blob, ext);
+    if (text && text.trim()) {
+      const ts = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+      transcriptBlocks.push({ ts, text: text.trim() });
+      renderTranscript();
+      const allWords = transcriptBlocks.map(b=>b.text).join(' ').split(/\s+/).filter(Boolean);
+      wordCount = allWords.length;
+      document.getElementById('wordCount').textContent = wordCount + ' words';
+    }
+    setChunkStat('');
+  } catch(e) {
+    console.error('Transcription error:', e);
+    setChunkStat('Transcription failed — will retry');
+    setTimeout(() => setChunkStat(''), 4000);
+    // Restore chunks so we can retry by appending next batch
+  }
+}
+
+async function transcribeAudio(blob, ext) {
+  const form = new FormData();
+  form.append('file', blob, 'audio.' + ext);
+  form.append('model', 'whisper-large-v3');
+  form.append('response_format', 'json');
+  form.append('language', 'en');
+  const res = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + cfg.apiKey },
+    body: form
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('Whisper ' + res.status + ': ' + err);
+  }
+  const data = await res.json();
+  return data.text || '';
+}
+
+function renderTranscript() {
+  const container = document.getElementById('transcriptLines');
+  container.innerHTML = '';
+  transcriptBlocks.forEach(b => {
+    const d = document.createElement('div');
+    d.className = 't-block';
+    d.innerHTML = `<div class="t-ts">${b.ts}</div><div class="t-text">${esc(b.text)}</div>`;
+    container.appendChild(d);
+  });
+  const body = document.getElementById('transcriptBody');
+  body.scrollTop = body.scrollHeight;
+}
+
+function setChunkStat(msg) {
+  const el = document.getElementById('chunkStat');
+  document.getElementById('chunkLabel').textContent = msg;
+  el.style.display = msg ? 'flex' : 'none';
+}
+
+// ── SUGGESTIONS ───────────────────────────────────────────────────────────────
+async function manualRefresh() {
+  if (isSuggesting) return;
+  nextRefreshIn = cfg.refreshInterval;
+  updateRefreshLabel();
+  await flushChunkAndSuggest();
+}
+
+async function flushChunkAndSuggest() {
+  await flushChunk();
+  await generateSuggestions();
+}
+
+async function generateSuggestions() {
+  if (isSuggesting) return;
+  const fullText = transcriptBlocks.map(b => b.text).join('\n');
+  if (!fullText.trim()) return;
+
+  const words = fullText.split(/\s+/);
+  const transcript = words.slice(-cfg.suggContext).join(' ');
+
+  isSuggesting = true;
+  const body = document.getElementById('suggestionsBody');
+  if (body.querySelector('.empty-msg')) body.innerHTML = '';
+
+  const loadEl = document.createElement('div');
+  loadEl.className = 'loading-block';
+  loadEl.id = 'sugg-load';
+  loadEl.innerHTML = '<div class="dots"><span></span><span></span><span></span></div> Analyzing conversation…';
+  body.prepend(loadEl);
+
+  try {
+    const prompt = cfg.suggPrompt.replace('{transcript}', transcript);
+    const raw = await callLLM(prompt, 900);
+    loadEl.remove();
+
+    const cards = parseSuggestions(raw);
+    if (!cards.length) { isSuggesting = false; return; }
+
+    const ts = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+    suggestionBatches.unshift({ ts, cards });
+
+    const batchEl = document.createElement('div');
+    batchEl.className = 'sugg-batch';
+    batchEl.innerHTML = `<div class="sugg-batch-ts">${ts}</div>`;
+
+    cards.forEach((card, i) => {
+      const el = document.createElement('div');
+      el.className = 'sugg-card';
+      el.style.animationDelay = (i * 0.08) + 's';
+      const typeClass = 'type-' + card.type;
+      el.innerHTML = `
+        <div class="sugg-type ${typeClass}">${card.type.replace(/-/g,' ')}</div>
+        <div class="sugg-preview">${esc(card.preview)}</div>
+        ${card.hint ? `<div class="sugg-hint">${esc(card.hint)}</div>` : ''}
+        <div class="sugg-arrow">›</div>`;
+      el.onclick = () => openSuggestion(card);
+      batchEl.appendChild(el);
+    });
+
+    body.prepend(batchEl);
+  } catch(e) {
+    loadEl.remove();
+    console.error('Suggestion error:', e);
+  }
+  isSuggesting = false;
+}
+
+function parseSuggestions(raw) {
+  try {
+    const match = raw.match(/\[[\s\S]*?\]/);
+    if (!match) return [];
+    const arr = JSON.parse(match[0]);
+    return arr.slice(0,3).filter(c => c.type && c.preview).map(c => ({
+      type: (c.type||'insight').toLowerCase().replace(/\s+/g,'-'),
+      preview: c.preview||'',
+      hint: c.hint||''
+    }));
+  } catch(e) {
+    console.error('Parse suggestions failed:', e, '\nRaw:', raw);
+    return [];
+  }
+}
+
+// ── CHAT ──────────────────────────────────────────────────────────────────────
+async function openSuggestion(card) {
+  if (!cfg.apiKey) { openSettings(); return; }
+  const label = `[${card.type.toUpperCase().replace(/-/g,' ')}] ${card.preview}`;
+  addUserMsg(label);
+
+  const transcript = getTranscriptContext(cfg.chatContext);
+  const prompt = cfg.detailPrompt
+    .replace('{transcript}', transcript)
+    .replace('{suggestion}', label);
+
+  await streamAI([{ role:'user', content: prompt }], true);
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || isChatting) return;
+  if (!cfg.apiKey) { openSettings(); return; }
+  input.value = '';
+  input.style.height = 'auto';
+  addUserMsg(text);
+
+  const transcript = getTranscriptContext(cfg.chatContext);
+  const sysPrompt = cfg.chatPrompt.replace('{transcript}', transcript);
+
+  const messages = [
+    { role:'system', content: sysPrompt },
+    ...chatHistory.filter(m=>m.role!=='system').map(m=>({role:m.role, content:m.content}))
+  ];
+  await streamAI(messages, false);
+}
+
+async function streamAI(messages, isSingle) {
+  if (isChatting) return;
+  isChatting = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  const chatMsgs = document.getElementById('chatMessages');
+  if (chatMsgs.querySelector('.empty-msg')) chatMsgs.innerHTML = '';
+
+  const msgEl = document.createElement('div');
+  msgEl.className = 'cmsg ai';
+  const lbl = document.createElement('div');
+  lbl.className = 'cmsg-label';
+  lbl.textContent = 'MindLens';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = '…';
+  msgEl.appendChild(lbl);
+  msgEl.appendChild(bubble);
+  chatMsgs.appendChild(msgEl);
+  chatMsgs.scrollTop = chatMsgs.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + cfg.apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+        max_tokens: 1000,
+        temperature: 0.7,
+        stream: true,
+        messages
+      })
+    });
+
+    if (!res.ok) { const t = await res.text(); throw new Error(res.status + ': ' + t); }
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let full = '';
+    bubble.textContent = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      for (const line of dec.decode(value).split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const d = line.slice(6).trim();
+        if (d === '[DONE]') continue;
+        try {
+          const delta = JSON.parse(d).choices?.[0]?.delta?.content || '';
+          full += delta;
+          bubble.textContent = full;
+          chatMsgs.scrollTop = chatMsgs.scrollHeight;
+        } catch(e) {}
+      }
+    }
+
+    const ts = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+    chatHistory.push({ role:'assistant', content: full, ts });
+  } catch(e) {
+    bubble.textContent = 'Error: ' + e.message;
+    console.error('Chat stream error:', e);
+  }
+
+  isChatting = false;
+  document.getElementById('sendBtn').disabled = false;
+  chatMsgs.scrollTop = chatMsgs.scrollHeight;
+}
+
+function addUserMsg(text) {
+  const chatMsgs = document.getElementById('chatMessages');
+  if (chatMsgs.querySelector('.empty-msg')) chatMsgs.innerHTML = '';
+
+  const ts = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+  chatHistory.push({ role:'user', content: text, ts });
+
+  const el = document.createElement('div');
+  el.className = 'cmsg user';
+  el.innerHTML = `<div class="cmsg-label user-lbl">You</div><div class="bubble">${esc(text)}</div>`;
+  chatMsgs.appendChild(el);
+  chatMsgs.scrollTop = chatMsgs.scrollHeight;
+}
+
+function clearChat() {
+  chatHistory = [];
+  document.getElementById('chatMessages').innerHTML =
+    '<div class="empty-msg" style="padding:30px 0">Click a suggestion<br>or type a question below.</div>';
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+async function callLLM(userPrompt, maxTokens=700) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + cfg.apiKey, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+      max_tokens: maxTokens,
+      temperature: 0.7,
+      messages: [{ role:'user', content: userPrompt }]
+    })
+  });
+  if (!res.ok) { const t = await res.text(); throw new Error(res.status + ': ' + t); }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+function getTranscriptContext(maxWords) {
+  const full = transcriptBlocks.map(b => `[${b.ts}] ${b.text}`).join('\n');
+  const words = full.split(/\s+/);
+  return words.slice(-maxWords).join(' ');
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────────────
+function exportSession() {
+  const data = {
+    exportedAt: new Date().toISOString(),
+    sessionStart: sessionStartTs ? new Date(sessionStartTs).toISOString() : null,
+    transcript: transcriptBlocks,
+    suggestionBatches,
+    chatHistory
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mindlens-' + new Date().toISOString().slice(0,19).replace(/:/g,'-') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
